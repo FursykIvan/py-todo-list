@@ -30,6 +30,7 @@
         <div>
           {% if task.done %}Done{% else %}Not done{% endif %}
           <form action="{% url 'task_status' task.id %}" method="post" class="form-inline">
+          {% csrf_token %}
             <button type="submit" class="btn btn-{% if task.done %}secondary{% else %}success{% endif %}">
               {% if task.done %}Undo{% else %}Complete{% endif %}
             </button>
