@@ -1,6 +1,7 @@
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import generic
+from django.views.decorators.csrf import csrf_exempt
 
 from .forms import TaskForm
 from .models import Task, Tag
@@ -35,11 +36,11 @@ class TaskDeleteView(generic.DeleteView):
 
 class TaskStatusView(generic.View):
     def post(self, request, *args, **kwargs):
-        task = Task.objects.get(pk=kwargs["pk"])
-        task.done = not task.done
-        task.save()
+        task = self.get_task(kwargs["pk"])
+        if task:
+            task.done = not task.done
+            task.save()
         return redirect("todo:home")
-
 
 class TagListView(generic.ListView):
     model = Tag
